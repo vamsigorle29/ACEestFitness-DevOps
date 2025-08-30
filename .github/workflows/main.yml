@@ -79,7 +79,7 @@ jobs:
     - name: Run tests inside Docker container
       run: |
         # Build test image with test dependencies
-        docker build -t aceest-fitness:test -f Dockerfile.test .
+        docker build -f Dockerfile.test -t aceest-fitness:test .
         
         # Run tests in container
         docker run --rm aceest-fitness:test pytest test_app.py -v
@@ -142,8 +142,8 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        cache-from: type=ghca
-        cache-to: type=ghca,mode=max
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
       # Note: If this fails due to permissions, the image is still built locally
 
   deploy-fallback:
