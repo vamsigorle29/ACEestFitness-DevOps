@@ -1,108 +1,105 @@
-# ACEestFitness and Gym - DevOps Assignment
+# ACEestFitness - Fitness Tracking Application
 
-A comprehensive fitness tracking web application built with Flask, featuring automated testing, Docker containerization, and CI/CD pipeline implementation.
+[![CI/CD Pipeline](https://github.com/vamsigorle29/ACEestFitness-DevOps/workflows/CI%3ACD%20Pipeline/badge.svg)](https://github.com/vamsigorle29/ACEestFitness-DevOps/actions)
+[![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Flask](https://img.shields.io/badge/flask-2.3.3+-green.svg)](https://flask.palletsprojects.com/)
+[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
 
-## 🏋️ Project Overview
+A Flask-based fitness tracking application with Docker containerization and automated CI/CD pipeline. Built for the DevOps assignment demonstrating modern development practices.
 
-ACEestFitness is a modern web application that allows users to:
-- Track workout sessions with duration and calorie information
-- View workout history and statistics
-- Access RESTful API endpoints for integration
-- Monitor fitness progress over time
+## Overview
 
-## 🚀 Features
+ACEestFitness allows users to track workout sessions, monitor progress, and maintain fitness records. The application includes a web interface for workout management and RESTful APIs for integration.
 
-- **Modern Web Interface**: Responsive design with Bootstrap 5
-- **Workout Management**: Add, view, and track fitness activities
-- **Data Persistence**: JSON-based data storage
-- **RESTful API**: Full API support for external integrations
-- **Health Monitoring**: Built-in health check endpoints
-- **Responsive Design**: Mobile-friendly interface
+## Features
 
-## 🛠️ Technology Stack
+- Workout tracking with duration and calorie information
+- Web-based interface with responsive design
+- RESTful API endpoints
+- JSON-based data persistence
+- Health monitoring endpoints
+- Docker containerization
+
+## Tech Stack
 
 - **Backend**: Flask (Python 3.9+)
-- **Frontend**: HTML5, CSS3, Bootstrap 5, JavaScript
-- **Testing**: Pytest with coverage reporting
-- **Containerization**: Docker with multi-stage builds
-- **CI/CD**: GitHub Actions with automated testing and deployment
-- **Security**: Bandit and Safety security scanning
+- **Frontend**: HTML5, CSS3, Bootstrap 5
+- **Testing**: Pytest with coverage
+- **Containerization**: Docker
+- **CI/CD**: GitHub Actions
+- **Security**: Automated vulnerability scanning
 
-## 📋 Prerequisites
+## Prerequisites
 
-- Python 3.9 or higher
+- Python 3.9+
 - Docker and Docker Compose
 - Git
 - Modern web browser
 
-## 🚀 Quick Start
+## Getting Started
 
-### Option 1: Local Development
+### Local Development
 
-1. **Clone the repository**
+1. Clone the repository
    ```bash
-   git clone <your-repo-url>
-   cd ACEestFitness
+   git clone https://github.com/vamsigorle29/ACEestFitness-DevOps.git
+   cd ACEestFitness-DevOps
    ```
 
-2. **Create virtual environment**
+2. Set up virtual environment
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate  # Windows: venv\Scripts\activate
    ```
 
-3. **Install dependencies**
+3. Install dependencies
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Run the application**
+4. Run the application
    ```bash
    python app.py
    ```
 
-5. **Open your browser**
-   Navigate to `http://localhost:5000`
+5. Open http://localhost:5000 in your browser
 
-### Option 2: Docker (Recommended)
+### Docker Deployment
 
-1. **Build and run with Docker Compose**
-   ```bash
-   docker-compose up --build
-   ```
+Using Docker Compose (recommended):
+```bash
+docker-compose up --build
+```
 
-2. **Or build and run manually**
-   ```bash
-   docker build -t aceest-fitness .
-   docker run -p 5000:5000 aceest-fitness
-   ```
+Or manual Docker build:
+```bash
+docker build -t aceest-fitness .
+docker run -p 5000:5000 aceest-fitness
+```
 
-## 🧪 Testing
+## Testing
 
-### Running Tests Locally
+### Local Testing
 
-1. **Install test dependencies**
-   ```bash
-   pip install pytest pytest-cov pytest-mock
-   ```
+Install test dependencies:
+```bash
+pip install -r requirements-test.txt
+```
 
-2. **Run all tests**
-   ```bash
-   pytest test_app.py -v
-   ```
+Run tests:
+```bash
+# All tests
+pytest test_app.py -v
 
-3. **Run with coverage**
-   ```bash
-   pytest test_app.py -v --cov=app --cov-report=html
-   ```
+# With coverage
+pytest test_app.py -v --cov=app --cov-report=html
 
-4. **Run specific test categories**
-   ```bash
-   pytest test_app.py -v -m "unit"      # Unit tests only
-   pytest test_app.py -v -m "integration" # Integration tests only
-   ```
+# Specific test types
+pytest test_app.py -v -m "unit"
+pytest test_app.py -v -m "integration"
+```
 
-### Testing in Docker
+### Docker Testing
 
 ```bash
 # Build test image
@@ -112,7 +109,7 @@ docker build -f Dockerfile.test -t aceest-fitness:test .
 docker run --rm aceest-fitness:test
 ```
 
-## 🐳 Docker
+## Docker
 
 ### Building Images
 
@@ -127,110 +124,94 @@ docker build -f Dockerfile.test -t aceest-fitness:test .
 ### Running Containers
 
 ```bash
-# Run production container
+# Production container
 docker run -d -p 5000:5000 --name fitness-app aceest-fitness:latest
 
-# Run with volume mounting for development
+# Development with volume mounting
 docker run -d -p 5000:5000 -v $(pwd):/app aceest-fitness:latest
 
-# Check container health
+# Health check
 docker exec fitness-app curl -f http://localhost:5000/health
 ```
 
-## 🔄 CI/CD Pipeline
+## CI/CD Pipeline
 
-The project includes a comprehensive GitHub Actions workflow that automatically:
+The GitHub Actions workflow automatically:
 
-### On Every Push:
-1. **Automated Testing**: Runs all Pytest unit tests
-2. **Docker Build**: Builds and tests Docker image
-3. **Security Scanning**: Runs Bandit and Safety checks
-4. **Code Coverage**: Generates and uploads coverage reports
+- Runs all tests on every push
+- Builds and tests Docker images
+- Performs security scanning
+- Generates coverage reports
+- Deploys to production on main branch
 
-### On Main Branch:
-1. **Production Build**: Creates production Docker image
-2. **Container Registry**: Pushes to GitHub Container Registry
-3. **Deployment Ready**: Image ready for production deployment
+### Pipeline Stages
 
-### Pipeline Stages:
-- **Test**: Unit and integration testing
-- **Build**: Docker image creation and validation
-- **Security**: Vulnerability scanning
-- **Deploy**: Production image publishing
-- **Notify**: Status reporting
+1. **Test**: Unit and integration testing
+2. **Build**: Docker image creation
+3. **Security**: Vulnerability scanning
+4. **Deploy**: Production deployment
+5. **Notify**: Status reporting
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ACEestFitness/
-├── app.py                 # Main Flask application
-├── requirements.txt       # Python dependencies
-├── test_app.py           # Comprehensive test suite
-├── pytest.ini           # Pytest configuration
-├── Dockerfile            # Production Docker image
-├── Dockerfile.test       # Testing Docker image
-├── docker-compose.yml    # Local development setup
-├── .github/
-│   └── workflows/
-│       └── main.yml      # CI/CD pipeline
+├── app.py                 # Flask application
+├── requirements.txt       # Dependencies
+├── requirements-test.txt  # Test dependencies
+├── test_app.py           # Test suite
+├── pytest.ini           # Pytest config
+├── Dockerfile            # Production image
+├── Dockerfile.test       # Test image
+├── docker-compose.yml    # Local development
+├── .github/workflows/    # CI/CD pipeline
 ├── templates/            # HTML templates
-│   ├── base.html
-│   ├── index.html
-│   ├── add_workout.html
-│   └── workouts.html
-└── README.md             # This file
+└── README.md
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
-- `FLASK_ENV`: Application environment (development/production)
+- `FLASK_ENV`: Environment (development/production)
 - `FLASK_DEBUG`: Debug mode (0/1)
-- `DATA_FILE`: Path to workout data file
+- `DATA_FILE`: Workout data file path
 
-### Flask Configuration
+## API Endpoints
 
-- Debug mode enabled for development
-- JSON-based data storage
-- Bootstrap 5 for responsive UI
-- Font Awesome icons
+### REST API
 
-## 📊 API Endpoints
-
-### RESTful API
-
-- `GET /api/workouts` - Retrieve all workouts
-- `POST /api/workouts` - Add new workout
-- `GET /health` - Health check endpoint
+- `GET /api/workouts` - List all workouts
+- `POST /api/workouts` - Create new workout
+- `GET /health` - Health check
 
 ### Web Routes
 
-- `GET /` - Home page with workout summary
+- `GET /` - Home page
 - `GET /add_workout` - Add workout form
-- `POST /add_workout` - Process workout submission
-- `GET /workouts` - View all workouts
+- `POST /add_workout` - Submit workout
+- `GET /workouts` - View workouts
 
-## 🧪 Test Coverage
+## Test Coverage
 
 The test suite covers:
 
-- **Route Testing**: All Flask routes and endpoints
-- **Data Functions**: JSON file operations
-- **API Validation**: Request/response handling
-- **Integration**: Complete workflow testing
-- **Edge Cases**: Error handling and validation
+- Flask route testing
+- Data function validation
+- API endpoint testing
+- Integration workflows
+- Error handling scenarios
 
-## 🚀 Deployment
+## Deployment
 
-### Production Deployment
+### Production
 
-1. **Build production image**
+1. Build production image
    ```bash
    docker build -t aceest-fitness:prod .
    ```
 
-2. **Run with production settings**
+2. Run with production settings
    ```bash
    docker run -d -p 80:5000 \
      -e FLASK_ENV=production \
@@ -239,7 +220,7 @@ The test suite covers:
      aceest-fitness:prod
    ```
 
-### Environment Variables for Production
+### Environment Variables
 
 ```bash
 FLASK_ENV=production
@@ -247,21 +228,21 @@ FLASK_DEBUG=0
 DATA_FILE=/app/data/workouts.json
 ```
 
-## 🔒 Security Features
+## Security
 
-- **Input Validation**: Comprehensive form validation
-- **Error Handling**: Graceful error management
-- **Security Headers**: Basic security headers
-- **Dependency Scanning**: Automated vulnerability checks
+- Input validation and sanitization
+- Error handling and logging
+- Dependency vulnerability scanning
+- Security headers implementation
 
-## 📈 Monitoring and Health Checks
+## Monitoring
 
-- **Health Endpoint**: `/health` for monitoring
-- **Docker Health Checks**: Container health monitoring
-- **Logging**: Application logging for debugging
-- **Metrics**: Basic application metrics
+- Health check endpoints
+- Docker health checks
+- Application logging
+- Performance metrics
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -270,38 +251,29 @@ DATA_FILE=/app/data/workouts.json
 5. Ensure all tests pass
 6. Submit a pull request
 
-## 📝 License
+## License
 
-This project is created for educational purposes as part of the DevOps assignment.
+Educational project for DevOps assignment.
 
-## 🆘 Support
+## Support
 
-For issues or questions:
+For issues:
+
 1. Check the test suite for examples
-2. Review the CI/CD pipeline logs
+2. Review CI/CD pipeline logs
 3. Check Docker container logs
 4. Verify environment configuration
 
-## 🎯 Assignment Completion Checklist
+## Assignment Status
 
-- ✅ **Flask Web Application**: Complete fitness tracking system
-- ✅ **Version Control**: Git repository with meaningful commits
-- ✅ **Unit Testing**: Comprehensive Pytest test suite
-- ✅ **Automated Testing**: Pytest configuration and execution
-- ✅ **Docker Containerization**: Production and test Dockerfiles
-- ✅ **CI/CD Pipeline**: GitHub Actions with automated testing
-- ✅ **Documentation**: Comprehensive README and setup instructions
-
-## 🏆 Getting 100% Results
-
-To achieve maximum marks:
-
-1. **Ensure all tests pass**: Run `pytest test_app.py -v`
-2. **Verify Docker builds**: Test both production and test images
-3. **Check CI/CD pipeline**: Ensure GitHub Actions run successfully
-4. **Test all functionality**: Verify web interface and API endpoints
-5. **Document everything**: Complete README with clear instructions
+- ✅ Flask Application
+- ✅ Version Control (Git)
+- ✅ Unit Testing (Pytest)
+- ✅ Automated Testing
+- ✅ Docker Containerization
+- ✅ CI/CD Pipeline (GitHub Actions)
+- ✅ Documentation
 
 ---
 
-**Built with ❤️ for DevOps Excellence** 
+Built for DevOps excellence 
