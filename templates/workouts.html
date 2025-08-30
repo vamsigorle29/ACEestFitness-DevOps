@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}View Workouts - ACEestFitness{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-list me-2"></i>All Workouts
+                    </h4>
+                    <a href="{{ url_for('add_workout') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add New Workout
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if workouts %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Workout Name</th>
+                                        <th>Duration</th>
+                                        <th>Calories</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for workout in workouts %}
+                                    <tr>
+                                        <td>{{ workout.id }}</td>
+                                        <td>
+                                            <i class="fas fa-dumbbell me-2 text-primary"></i>
+                                            <strong>{{ workout.workout_name }}</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">{{ workout.duration }} min</span>
+                                        </td>
+                                        <td>
+                                            {% if workout.calories > 0 %}
+                                                <span class="badge bg-warning">{{ workout.calories }} cal</span>
+                                            {% else %}
+                                                <span class="text-muted">-</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">{{ workout.date }}</small>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-sm btn-outline-info" 
+                                                        data-bs-toggle="tooltip" title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-success" 
+                                                        data-bs-toggle="tooltip" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <i class="fas fa-chart-bar me-2"></i>Summary
+                                        </h6>
+                                        <p class="mb-1">Total Workouts: <strong>{{ workouts|length }}</strong></p>
+                                        <p class="mb-1">Total Duration: <strong>{{ workouts|sum(attribute='duration') }} minutes</strong></p>
+                                        <p class="mb-0">Total Calories: <strong>{{ workouts|sum(attribute='calories') }} cal</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <i class="fas fa-trophy me-2"></i>Top Workouts
+                                        </h6>
+                                        {% set top_workout = workouts|sort(attribute='duration', reverse=true)|first %}
+                                        {% if top_workout %}
+                                            <p class="mb-1">Longest: <strong>{{ top_workout.workout_name }}</strong> ({{ top_workout.duration }} min)</p>
+                                        {% endif %}
+                                        {% set high_calorie = workouts|sort(attribute='calories', reverse=true)|first %}
+                                        {% if high_calorie and high_calorie.calories > 0 %}
+                                            <p class="mb-0">Most Calories: <strong>{{ high_calorie.workout_name }}</strong> ({{ high_calorie.calories }} cal)</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-dumbbell fa-4x text-muted mb-4"></i>
+                            <h5 class="text-muted">No workouts found</h5>
+                            <p class="text-muted">Start tracking your fitness journey by adding your first workout!</p>
+                            <a href="{{ url_for('add_workout') }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-plus me-2"></i>Add Your First Workout
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Initialize tooltips
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+</script>
+{% endblock %} 

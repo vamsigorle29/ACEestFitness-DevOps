@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Home - ACEestFitness{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">Welcome to ACEestFitness</h1>
+        <p class="lead">Track your workouts, monitor your progress, and achieve your fitness goals!</p>
+        <a href="{{ url_for('add_workout') }}" class="btn btn-light btn-lg">
+            <i class="fas fa-plus me-2"></i>Add New Workout
+        </a>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card stats-card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-dumbbell fa-3x mb-3"></i>
+                    <h3 class="card-title">{{ total_workouts }}</h3>
+                    <p class="card-text">Total Workouts</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card stats-card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-clock fa-3x mb-3"></i>
+                    <h3 class="card-title">{{ total_duration }}</h3>
+                    <p class="card-text">Total Minutes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Recent Workouts
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_workouts %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Workout</th>
+                                        <th>Duration</th>
+                                        <th>Calories</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for workout in recent_workouts %}
+                                    <tr>
+                                        <td>
+                                            <i class="fas fa-dumbbell me-2 text-primary"></i>
+                                            {{ workout.workout_name }}
+                                        </td>
+                                        <td>{{ workout.duration }} min</td>
+                                        <td>{{ workout.calories }} cal</td>
+                                        <td>{{ workout.date }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{{ url_for('view_workouts') }}" class="btn btn-outline-primary">
+                                View All Workouts
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-dumbbell fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No workouts logged yet. Start your fitness journey today!</p>
+                            <a href="{{ url_for('add_workout') }}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Add Your First Workout
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
