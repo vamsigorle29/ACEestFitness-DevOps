@@ -2,6 +2,7 @@ import pytest
 import json
 import os
 import tempfile
+from unittest.mock import patch
 from app import app, load_workouts, save_workouts
 
 @pytest.fixture
@@ -16,10 +17,11 @@ def client():
         temp_file = f.name
     
     # Override the data file path for testing
-    app.config['DATA_FILE'] = temp_file
-    
-    with app.test_client() as client:
-        yield client
+    with patch('app.DATA_FILE', temp_file):
+        with app.test_client() as client:
+            # Ensure the app context is available
+            with app.app_context():
+                yield client
     
     # Clean up temporary file
     os.unlink(temp_file)
@@ -32,6 +34,18 @@ def sample_workout():
         'duration': 30,
         'calories': 200
     }
+
+@pytest.fixture
+def temp_data_file():
+    """Create a temporary data file for testing"""
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        f.write('[]')
+        temp_file = f.name
+    
+    yield temp_file
+    
+    # Clean up
+    os.unlink(temp_file)
 
 class TestAppRoutes:
     """Test all Flask application routes"""
@@ -139,68 +153,42 @@ class TestAppRoutes:
 class TestDataFunctions:
     """Test data handling functions"""
     
-    def test_load_workouts_empty_file(self):
+    def test_load_workouts_empty_file(self, temp_data_file):
         """Test loading workouts from empty file"""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
-            f.write('[]')
-            temp_file = f.name
-        
-        try:
-            # Temporarily override the data file
-            original_file = app.config.get('DATA_FILE', 'workouts.json')
-            app.config['DATA_FILE'] = temp_file
-            
+        with patch('app.DATA_FILE', temp_data_file):
             workouts = load_workouts()
             assert isinstance(workouts, list)
             assert len(workouts) == 0
-        finally:
-            os.unlink(temp_file)
     
-    def test_load_workouts_with_data(self):
+    def test_load_workouts_with_data(self, temp_data_file):
         """Test loading workouts from file with data"""
         test_data = [
             {'id': 1, 'workout_name': 'Running', 'duration': 30, 'calories': 200}
         ]
         
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with open(temp_data_file, 'w') as f:
             json.dump(test_data, f)
-            temp_file = f.name
         
-        try:
-            # Temporarily override the data file
-            original_file = app.config.get('DATA_FILE', 'workouts.json')
-            app.config['DATA_FILE'] = temp_file
-            
+        with patch('app.DATA_FILE', temp_data_file):
             workouts = load_workouts()
             assert isinstance(workouts, list)
             assert len(workouts) == 1
             assert workouts[0]['workout_name'] == 'Running'
-        finally:
-            os.unlink(temp_file)
     
-    def test_save_workouts(self):
+    def test_save_workouts(self, temp_data_file):
         """Test saving workouts to file"""
         test_data = [
             {'id': 1, 'workout_name': 'Running', 'duration': 30, 'calories': 200}
         ]
         
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
-            temp_file = f.name
-        
-        try:
-            # Temporarily override the data file
-            original_file = app.config.get('DATA_FILE', 'workouts.json')
-            app.config['DATA_FILE'] = temp_file
-            
+        with patch('app.DATA_FILE', temp_data_file):
             save_workouts(test_data)
             
             # Verify data was saved
-            with open(temp_file, 'r') as f:
+            with open(temp_data_file, 'r') as f:
                 saved_data = json.load(f)
             
             assert saved_data == test_data
-        finally:
-            os.unlink(temp_file)
 
 class TestIntegration:
     """Integration tests for the complete workflow"""

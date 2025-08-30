@@ -6,8 +6,8 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'
 
-# Data file to persist workouts
-DATA_FILE = 'workouts.json'
+# Data file to persist workouts - can be overridden for testing
+DATA_FILE = os.environ.get('DATA_FILE', 'workouts.json')
 
 def load_workouts():
     """Load workouts from JSON file"""
