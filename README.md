@@ -315,10 +315,6 @@ docker --version
 docker system prune -a
 ```
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🆘 Support
 
 Need help? Here are your options:
