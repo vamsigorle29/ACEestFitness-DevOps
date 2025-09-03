@@ -29,5 +29,5 @@ COPY . .
 RUN mkdir -p /app/data
 
 # Run tests
-CMD ["pytest", "test_app.py", "-v", "--cov=app", "--cov-report=term-missing"] 
+CMD ["pytest", "tests/, "-v", "--cov=src", "--cov-report=term-missing"] 
  

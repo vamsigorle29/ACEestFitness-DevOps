@@ -3,7 +3,7 @@ import json
 import os
 import tempfile
 from unittest.mock import patch
-from app import app, load_workouts, save_workouts
+from src.app import app, load_workouts, save_workouts
 
 @pytest.fixture
 def client():
@@ -17,7 +17,7 @@ def client():
         temp_file = f.name
     
     # Override the data file path for testing
-    with patch('app.DATA_FILE', temp_file):
+    with patch('src.app.DATA_FILE', temp_file):
         with app.test_client() as client:
             # Ensure the app context is available
             with app.app_context():
@@ -155,7 +155,7 @@ class TestDataFunctions:
     
     def test_load_workouts_empty_file(self, temp_data_file):
         """Test loading workouts from empty file"""
-        with patch('app.DATA_FILE', temp_data_file):
+        with patch('src.app.DATA_FILE', temp_data_file):
             workouts = load_workouts()
             assert isinstance(workouts, list)
             assert len(workouts) == 0
@@ -169,7 +169,7 @@ class TestDataFunctions:
         with open(temp_data_file, 'w') as f:
             json.dump(test_data, f)
         
-        with patch('app.DATA_FILE', temp_data_file):
+        with patch('src.app.DATA_FILE', temp_data_file):
             workouts = load_workouts()
             assert isinstance(workouts, list)
             assert len(workouts) == 1
@@ -181,7 +181,7 @@ class TestDataFunctions:
             {'id': 1, 'workout_name': 'Running', 'duration': 30, 'calories': 200}
         ]
         
-        with patch('app.DATA_FILE', temp_data_file):
+        with patch('src.app.DATA_FILE', temp_data_file):
             save_workouts(test_data)
             
             # Verify data was saved
